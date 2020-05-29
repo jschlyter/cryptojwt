@@ -432,6 +432,8 @@ def test_outdated():
 
 
 def test_dump_jwks():
+    filename = "jwks_combo.json"
+
     a = {"kty": "oct", "key": "highestsupersecret", "use": "sig"}
     b = {"kty": "oct", "key": "highestsupersecret", "use": "enc"}
     kb2 = KeyBundle([a, b])
@@ -439,27 +441,29 @@ def test_dump_jwks():
     kb1 = rsa_init({'use': ['enc', 'sig'], 'size': 1024, 'name': 'rsa', 'path': 'keys'})
 
     # Will not dump symmetric keys
-    dump_jwks([kb1, kb2], 'jwks_combo')
+    dump_jwks([kb1, kb2], filename)
 
     # Now read it
 
-    nkb = KeyBundle(source='file://jwks_combo', fileformat='jwks')
+    nkb = KeyBundle(source='file://'+filename, fileformat='jwks')
 
     assert len(nkb) == 2
     # both RSA keys
     assert len(nkb.get('rsa')) == 2
 
     # Will dump symmetric keys
-    dump_jwks([kb1, kb2], 'jwks_combo', symmetric_too=True)
+    dump_jwks([kb1, kb2], filename, symmetric_too=True)
 
     # Now read it
-    nkb = KeyBundle(source='file://jwks_combo', fileformat='jwks')
+    nkb = KeyBundle(source='file://'+filename, fileformat='jwks')
 
     assert len(nkb) == 4
     # two RSA keys
     assert len(nkb.get('rsa')) == 2
     # two symmetric keys
     assert len(nkb.get('oct')) == 2
+
+    os.unlink(filename)
 
 
 def test_mark_as_inactive():
