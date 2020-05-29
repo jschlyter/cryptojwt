@@ -576,6 +576,8 @@ def test_update_2():
     kb.update()
     assert len(kb) == 2
 
+    os.unlink(fname)
+
 
 def test_update_mark_inactive():
     rsa_key = new_rsa_key()
@@ -602,6 +604,8 @@ def test_update_mark_inactive():
 
     assert len(kb.get('rsa')) == 1
     assert len(kb.get('rsa', only_active=False)) == 2
+
+    os.unlink(fname)
 
 
 def test_loads_0():
@@ -944,6 +948,8 @@ def test_init_key():
     # Now _jwk3 is stored in the file
     _jwk4 = init_key(filename, "RSA")
     assert _jwk4 == _jwk3
+
+    os.unlink(filename)
 
 
 def test_export_inactive():

@@ -884,6 +884,10 @@ def test_init_key_jar_dump_public():
 
     # verify that the 2 Key jars contains the same keys
 
+    for _file in [PRIVATE_FILE, PUBLIC_FILE]:
+        if os.path.isfile(_file):
+            os.unlink(_file)
+
 
 def test_init_key_jar_dump_private():
     for _file in [PRIVATE_FILE, PUBLIC_FILE]:
@@ -898,6 +902,10 @@ def test_init_key_jar_dump_private():
     # JWKS will be read from disc, not created new
     _keyjar2 = init_key_jar(private_path=PRIVATE_FILE, key_defs=KEYSPEC)
     assert list(_keyjar2.owners()) == ['']
+
+    for _file in [PRIVATE_FILE, PUBLIC_FILE]:
+        if os.path.isfile(_file):
+            os.unlink(_file)
 
 
 def test_init_key_jar_update():
@@ -943,6 +951,10 @@ def test_init_key_jar_update():
 
     assert len(_keyjar_5.get_signing_key('RSA')) == 1
     assert len(_keyjar_5.get_signing_key('EC')) == 2
+
+    for _file in [PRIVATE_FILE, PUBLIC_FILE]:
+        if os.path.isfile(_file):
+            os.unlink(_file)
 
 
 OIDC_KEYS = {
